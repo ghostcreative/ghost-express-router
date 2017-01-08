@@ -24,22 +24,27 @@ const routeHandler = (req, res, next) => {
   res.sendStatus(200);
 };
 
-Router.handle('GET', '/', {
-  'profileLimitedReadOnlyAccess': routeHandler,
-  'profileFullAccess': routeHandler
-});
-
-Router.handle('POST', '/', {
-  'profileFullAccess': routeHandler
-});
-      server.useRouter('/profile', Router.getRouter());
-
 describe('GhostExpressRouter', function () {
 
   before(() => {
+
+    Router.handle('GET', '/', {
+      'profileLimitedReadOnlyAccess': routeHandler,
+      'profileFullAccess': routeHandler
+    });
+
+    Router.handle('PUT', '/', routeHandler);
+
+    Router.handle('POST', '/', {
+      'profileFullAccess': routeHandler
+    });
+
+    console.log("Router Stack", Router.getRouter().stack)
+
     return Promise.resolve()
     .then(() => GhostExpressServer.create(Config.get('server')))
     .then(_server_ => server = _server_)
+    .then(() => server.useRouter('/profile', Router.getRouter()))
     .then(() => dbSetup.syncAll())
     .then(() => dbSetup.setupEntireAccount({ email: 'seed@gmail.com', password: 'secure123$' }))
     .tap(_seed_ => seed = _seed_)
@@ -59,20 +64,33 @@ describe('GhostExpressRouter', function () {
 
   describe('handle', () => {
 
-    after(() => server.stop());
-
-    it('should allow to define router with routeOptions and properly validate GET & POST requests', () => {
-
+    beforeEach(() => {
       return Promise.resolve()
       .then(() => server.start())
       .then(() => request = Supertest(server.getServerInstance()))
-      .then(() => {
-        return request.get('/profile')
-        .set('Authorization', `Bearer ${seed.bearerTkn}`)
-        .expect(200)
-      })
+    });
 
-    })
+    afterEach(() => server.stop());
+
+    it('should allow to define router with routeOptions and properly validate GET & POST requests', () => {
+      return request.get('/profile')
+      .set('Authorization', `Bearer ${seed.bearerTkn}`)
+      .expect(200)
+
+    });
+
+    it('should return 403 Forbidden when attempting to access a route without permission', () => {
+
+      return request.post('/profile')
+      .set('Authorization', `Bearer ${seed.bearerTkn}`)
+      .expect(403)
+    });
+
+    it('should allow normal callbacks to be passed in place of routeOptions', () => {
+      return request.put('/profile')
+      .set('Authorization', `Bearer ${seed.bearerTkn}`)
+      .expect(200)
+    });
 
   });
 
