@@ -1,0 +1,23 @@
+{
+  "auth": {
+    "authSecret": "super$secret",
+    "plugin": "bearerJwt"
+  },
+
+  "database": {
+    "username": "root",
+    "password": "mysql@9028",
+    "database": "gc_auth_test",
+    "options": {
+      "host": "localhost",
+      "dialect": "mysql",
+      "logging": false,
+      "sync": {
+        "force": true
+      }
+    },
+    "models": {
+      "dirPath": "../test/models"
+    }
+  }
+}
