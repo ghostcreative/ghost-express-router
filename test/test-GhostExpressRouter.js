@@ -20,6 +20,10 @@ let request;
 let server;
 let seed;
 
+const nextyNext = (req, res, next) => {
+  next();
+};
+
 const routeHandler200 = (req, res) => {
   res.sendStatus(200);
 };
@@ -33,7 +37,7 @@ describe('GhostExpressRouter', function () {
   before(() => {
 
     Router.handle('GET', '/', {
-      'profileLimitedReadOnlyAccess': routeHandler200,
+      'profileLimitedReadOnlyAccess': [nextyNext, routeHandler200],
       'profileFullAccess': routeHandler202
     });
 
