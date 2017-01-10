@@ -50,6 +50,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING
     }
   }, {
+    scopes: {
+      limited: {
+        attributes: ['id', 'name', 'phone']
+      }
+    },
     classMethods: {
       associate: function(models) {
         Profile.hasOne(models.user, {
