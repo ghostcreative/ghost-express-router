@@ -1,1 +1,1 @@
-module.exports = require('./lib/GhostExpressRouterFactory');
+module.exports = require('./lib/GhostExpressRouter');
