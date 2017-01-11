@@ -28,7 +28,6 @@ const nextyNext = (req, res, next) => {
 };
 
 const routeHandler200 = (req, res) => {
-  console.log("routeHandler200")
   res.sendStatus(200);
 };
 
@@ -36,7 +35,6 @@ describe('GhostExpressRouter', function () {
 
   before(() => {
 
-    console.log("STARTING TO CONFIGURE");
     Router.configure([
       {
         method: 'GET',
@@ -47,7 +45,9 @@ describe('GhostExpressRouter', function () {
         },
         handler: [nextyNext, routeHandler200],
         validate: {
-          'id': Joi.types.Number().integer()
+          params: {
+            'id': Joi.types.Number().integer()
+          }
         }
       }, {
         method: 'POST',
