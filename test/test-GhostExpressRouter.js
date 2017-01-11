@@ -8,6 +8,8 @@ const MockExpressRequest = require('mock-express-request');
 const MockExpressResponse = require('mock-express-response');
 const Express = require('express');
 const GhostExpressServer = require('ghost-express-server');
+const ExpressJoi = require('express-joi');
+const Joi = ExpressJoi.Joi;
 
 const dbSetup = require('./helpers/dbSetup');
 const Db = dbSetup.getDb();
@@ -38,12 +40,15 @@ describe('GhostExpressRouter', function () {
     Router.configure([
       {
         method: 'GET',
-        path: '/restricted',
+        path: '/restricted/:id',
         auth: {
           plugin: 'bearerJwt',
           permissions: ['profileLimitedReadOnlyAccess', 'profileFullAccess']
         },
-        handler: [nextyNext, routeHandler200]
+        handler: [nextyNext, routeHandler200],
+        validate: {
+          'id': Joi.types.Number().integer()
+        }
       }, {
         method: 'POST',
         path: '/restricted',
