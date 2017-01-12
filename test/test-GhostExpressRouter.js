@@ -143,7 +143,7 @@ describe('GhostExpressRouter', function () {
       .set('Authorization', `Bearer ${seed.bearerTkn}`)
       .expect(400)
       .expect(res => {
-        expect(res.body.message).to.be.equal('Restricted id must be a number.');
+        expect(res.body.message).to.be.equal('"id" must be a number');
       })
     });
 
