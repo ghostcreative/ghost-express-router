@@ -21,17 +21,17 @@ class DbSetup {
    * @param {String} userId
    * @returns {String}
    */
-  static generateTokenFromUserId (userId) {
-    return Jwt.encode({ user: userId, expires: Moment().add(4, 'days') }, Config.get("server.auth.authSecret"))
+  static generateTokenFromUserIdAndRole (userId, role) {
+    return Jwt.encode({ user: userId, role: role, expires: Moment().add(4, 'days') }, Config.get("server.auth.authSecret"))
   }
 
-  static generateExpiredTokenFromUserId (userId) {
-    return Jwt.encode({ user: userId, expires: Moment().subtract(2, 'days') }, Config.get("server.auth.authSecret"))
+  static generateExpiredTokenFromUserIdAndRole (userId, role) {
+    return Jwt.encode({ user: userId, role: role, expires: Moment().subtract(2, 'days') }, Config.get("server.auth.authSecret"))
   }
 
   static generateTokenFromProfileId (profileId) {
     return Db.user.findOne({ where: { profileId: profileId } })
-    .then(user => this.generateTokenFromUserIdAndRole(user.id, user.role))
+    .then(user => this.generateTokenFromUserIdAndRoleAndRole(user.id, user.role))
   }
 
   static truncateTables (tableNames) {
@@ -64,7 +64,9 @@ class DbSetup {
       seedData.user = user;
       data.userId = user.id;
     })
-    .then(() => this.generateTokenFromUserId(seedData.user.id))
+    .then(() => this.setupRole(data))
+    .tap(role => seedData.userRole = role)
+    .then(() => this.generateTokenFromUserIdAndRole(seedData.user.id, seedData.userRole.name))
     .tap(bearerTkn => seedData.bearerTkn = bearerTkn)
     .then(() => seedData);
   }
@@ -83,7 +85,9 @@ class DbSetup {
       seedData.user = user;
       data.userId = user.id;
     })
-    .then(() => this.generateExpiredTokenFromUserId(seedData.user.id))
+    .then(() => this.setupRole(data))
+    .tap(role => seedData.userRole = role)
+    .then(() => this.generateExpiredTokenFromUserIdAndRole(seedData.user.id, seedData.userRole.name))
     .tap(bearerTkn => seedData.bearerTkn = bearerTkn)
     .then(() => seedData);
   }

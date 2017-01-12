@@ -27,6 +27,8 @@ module.exports = function(sequelize, DataTypes) {
         Permission.belongsTo(models.modelScope);
         Permission.belongsToMany(models.user, { through: models.userPermission });
         Permission.belongsToMany(models.role, { through: models.rolePermission });
+        Permission.hasMany(models.userPermission);
+        Permission.hasMany(models.rolePermission);
       }
     }
   });

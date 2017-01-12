@@ -34,6 +34,7 @@ module.exports = function (sequelize, DataTypes) {
       associate: function(models) {
         User.belongsTo(models.profile);
         User.belongsTo(models.resetToken)
+        User.hasMany(models.userPermission);
       }
     },
     instanceMethods: {

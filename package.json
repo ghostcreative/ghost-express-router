@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test mocha ./test --recursive",
     "test:router": "NODE_ENV=test mocha ./test/test-GhostExpressRouter.js",
+    "test:router:grep": "NODE_ENV=test mocha ./test/test-GhostExpressRouter.js --grep",
     "test:server": "NODE_ENV=test mocha ./test/server --recursive",
     "test:services": "NODE_ENV=test mocha ./test/services --recursive"
   },
@@ -24,7 +25,6 @@
     "connect-sequence": "^1.3.0",
     "express": "^4.14.0",
     "express-boom": "^2.0.0",
-    "express-joi": "^0.3.1",
     "express-winston": "^1.3.1",
     "ghost-logger": "^1.1.1",
     "joi": "^10.1.0",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chance": "^1.0.4npm ",
-    "ghost-express-server": "^2.0.3",
+    "ghost-express-server": "^2.0.9",
     "ghost-sequelize": "^1.0.2",
     "mocha": "^3.1.2",
     "mock-express-request": "^0.2.0",
