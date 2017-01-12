@@ -18,7 +18,7 @@ const GhostLogger = require('ghost-logger');
 const Logger = new GhostLogger(Config.get('logger'));
 
 const GhostExpressRouter = require('../index');
-const Router = new GhostExpressRouter({ db, Logger });
+const Router = new GhostExpressRouter();
 
 
 let request;
@@ -40,6 +40,14 @@ describe('GhostExpressRouter', function () {
 
     Router.configure([
       {
+        method: 'GET',
+        path: '/restricted',
+        auth: {
+          plugin: 'bearerJwt',
+          permissions: ['profileLimitedReadOnlyAccess', 'profileFullAccess']
+        },
+        handler: [nextyNext, routeHandler200]
+      }, {
         method: 'GET',
         path: '/restricted/:id',
         auth: {
