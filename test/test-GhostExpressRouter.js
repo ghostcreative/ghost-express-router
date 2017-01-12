@@ -12,10 +12,13 @@ const ExpressJoi = require('express-joi');
 const Joi = ExpressJoi.Joi;
 
 const dbSetup = require('./helpers/dbSetup');
-const Db = dbSetup.getDb();
+const db = dbSetup.getDb();
+
+const GhostLogger = require('ghost-logger');
+const Logger = new GhostLogger(Config.get('logger'));
 
 const GhostExpressRouter = require('../index');
-const Router = new GhostExpressRouter(Db);
+const Router = new GhostExpressRouter({ db, Logger });
 
 
 let request;
@@ -75,9 +78,8 @@ describe('GhostExpressRouter', function () {
     .tap(() => console.log("STARTING SETUP"))
     .then(() => GhostExpressServer.create(Config.get('server')))
     .then(_server_ => server = _server_)
-    .tap(() => console.log('getRouter', Router.getRouter()))
-    .then(() => server.useRouter('/test', Router.getRouter()))
-    .then(() => server.useMiddleware('*', Router.ErrorHandler))
+    .tap(() => console.log('getRouter', Router.register()))
+    .then(() => server.useRouter('/test', Router.register()))
     .then(() => dbSetup.syncAll())
     .then(() => dbSetup.setupEntireAccount({ email: 'seed@gmail.com', password: 'secure123$' }))
     .tap(_seed_ => seed = _seed_)
