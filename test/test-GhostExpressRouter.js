@@ -83,7 +83,6 @@ describe('GhostExpressRouter', function () {
     ]);
 
     return Promise.resolve()
-    .tap(() => console.log("STARTING SETUP"))
     .then(() => GhostExpressServer.create(Config.get('server')))
     .then(_server_ => server = _server_)
     .then(() => server.useRouter('/test', Router))
@@ -108,7 +107,7 @@ describe('GhostExpressRouter', function () {
     .tap(rolePermission => seed.userRolePermission = rolePermission)
     .then(() => dbSetup.setupRolePermission({ roleName: seed.adminRole.name, permissionName: seed.fullPermission.name }))
     .tap(rolePermission => seed.adminRolePermission = rolePermission)
-    .tap(() => console.log("FINISHED SETUP"))
+    .catch(err => Logger.error('test-GhostExpressRouterError', err))
   });
 
 
@@ -123,7 +122,6 @@ describe('GhostExpressRouter', function () {
     afterEach(() => server.stop());
 
     it('should return a 401 Unauthorized when a bearerTkn is not provided for a permissioned route', () => {
-      console.log("STARTING TEST")
       return request.get('/test/restricted')
       .expect(401)
       .expect(res => {
