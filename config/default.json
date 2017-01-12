@@ -26,6 +26,7 @@
     },
 
     "logger": {
+      "enabled": true,
       "console": {
         "enabled": true,
         "json": true,
@@ -33,7 +34,10 @@
       },
       "logentries": {
         "enabled": true,
-        "token": "f818ba8e-4768-43a1-b587-0a6f689b840a"
+        "console": true,
+        "token": "f818ba8e-4768-43a1-b587-0a6f689b840a",
+        "timestamp": true,
+        "withStack": true
       }
     },
 
@@ -47,7 +51,7 @@
       "database": {
         "username": "root",
         "password": "password",
-        "database": "ghost_test",
+        "database": "ghost_sequelize_test",
         "options": {
           "host": "localhost",
           "dialect": "mysql",
@@ -62,8 +66,13 @@
       }
     },
 
+    "staticAssets": {
+      "enabled": false
+    },
+
     "template": {
       "enabled": false
     }
+
   }
 }
