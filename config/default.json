@@ -1,31 +1,69 @@
 {
-  "auth": {
-    "authSecret": "super$secret",
-    "plugin": "bearerJwt"
-  },
+  "server": {
 
-  "database": {
-    "username": "root",
-    "password": "mysql@9028",
-    "database": "gc_auth_test",
-    "options": {
-      "host": "localhost",
-      "dialect": "mysql",
-      "logging": false,
-      "sync": {
-        "force": true
+    "auth": {
+      "authSecret": "^uI63r@FRZeZPl)07snE",
+      "plugin": "bearerJwt"
+    },
+
+    "core": {
+      "allowCrossDomain": false,
+      "bodyParser": {
+        "sizeLimit": "50mb",
+        "extended": false
+      },
+      "enable": ["trust proxy"],
+      "port": 4000,
+      "staticAssets": {
+        "enabled": false
+      }
+
+    },
+
+    "error": {
+      "dumpExceptions": true,
+      "showStack": true
+    },
+
+    "logger": {
+      "console": {
+        "enabled": true,
+        "json": true,
+        "colorize": true
+      },
+      "logentries": {
+        "enabled": true,
+        "token": "f818ba8e-4768-43a1-b587-0a6f689b840a"
       }
     },
-    "models": {
-      "dirPath": "../test/models"
-    }
-  },
 
-  "logger": {
-    "logentries": {
-      "enabled": true,
-      "token": "f818ba8e-4768-43a1-b587-0a6f689b840a",
-      "console": true
+    "plugins": {
+      "prerender": {
+        "enabled": false
+      }
+    },
+
+    "sequelize": {
+      "database": {
+        "username": "root",
+        "password": "password",
+        "database": "ghost_test",
+        "options": {
+          "host": "localhost",
+          "dialect": "mysql",
+          "logging": false,
+          "sync": {
+            "force": false
+          }
+        }
+      },
+      "models": {
+        "dirPath": "../../../test/models"
+      }
+    },
+
+    "template": {
+      "enabled": false
     }
   }
 }

@@ -7,7 +7,7 @@ const Moment = require('moment');
 const _ = require('lodash');
 
 const GhostSequelize = require('ghost-sequelize');
-const Db = new GhostSequelize(Config.get("database")).getDb();
+const Db = new GhostSequelize(Config.get("server.sequelize")).getDb();
 
 class DbSetup {
 
@@ -22,11 +22,11 @@ class DbSetup {
    * @returns {String}
    */
   static generateTokenFromUserId (userId) {
-    return Jwt.encode({ user: userId, expires: Moment().add(4, 'days') }, Config.get("auth.authSecret"))
+    return Jwt.encode({ user: userId, expires: Moment().add(4, 'days') }, Config.get("server.auth.authSecret"))
   }
 
   static generateExpiredTokenFromUserId (userId) {
-    return Jwt.encode({ user: userId, expires: Moment().subtract(2, 'days') }, Config.get("auth.authSecret"))
+    return Jwt.encode({ user: userId, expires: Moment().subtract(2, 'days') }, Config.get("server.auth.authSecret"))
   }
 
   static generateTokenFromProfileId (profileId) {
