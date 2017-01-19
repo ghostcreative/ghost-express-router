@@ -1,6 +1,6 @@
-# hapi-router
+# ghost-express-router
 
-[![Build Status](https://travis-ci.org/bsiddiqui/hapi-router.svg?branch=master)](https://travis-ci.org/bsiddiqui/hapi-router) [![Code Climate](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/gpa.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Test Coverage](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/coverage.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Version](https://badge.fury.io/js/hapi-router.svg)](http://badge.fury.io/js/hapi-router) [![Downloads](http://img.shields.io/npm/dm/hapi-router.svg)](https://www.npmjs.com/package/hapi-router)
+[![Code Climate](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/gpa.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Test Coverage](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/coverage.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Version](https://badge.fury.io/js/hapi-router.svg)](http://badge.fury.io/js/hapi-router) [![Downloads](http://img.shields.io/npm/dm/hapi-router.svg)](https://www.npmjs.com/package/hapi-router)
 
 Route loader for [hapi](https://github.com/spumko/hapi).
 
