@@ -13,6 +13,8 @@ $ npm install ghost-express-router
 ## Usage
 
 ```js
+const Config = require('config');
+const Joi = require('joi');
 const GhostExpressServer = require('ghost-express-server');
 const GhostExpressRouter = require('ghost-express-router');
 const GhostRouteController = require('ghost-route-controller');
