@@ -1,6 +1,6 @@
 {
   "name": "ghost-express-router",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "nodejs express router to handle authorization and permissioning for ghost express apps",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "ghost",
     "creative"
   ],
+  "repository": "https://github.com/ghostcreative/ghost-express-router",
   "author": "Ghost Creative",
   "license": "ISC",
   "dependencies": {

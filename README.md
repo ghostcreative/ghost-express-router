@@ -1,105 +1,98 @@
 # ghost-express-router
 
-[![Code Climate](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/gpa.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Test Coverage](https://codeclimate.com/github/bsiddiqui/hapi-router/badges/coverage.svg)](https://codeclimate.com/github/bsiddiqui/hapi-router) [![Version](https://badge.fury.io/js/hapi-router.svg)](http://badge.fury.io/js/hapi-router) [![Downloads](http://img.shields.io/npm/dm/hapi-router.svg)](https://www.npmjs.com/package/hapi-router)
+[![Code Climate](https://codeclimate.com/github/ghostcreative/ghost-express-router/badges/gpa.svg)](https://codeclimate.com/github/ghostcreative/ghost-express-router) [![Downloads](http://img.shields.io/npm/dt/ghost-express-router.svg)](https://www.npmjs.com/package/ghost-express-router)
 
-Route loader for [hapi](https://github.com/spumko/hapi).
+Router for [ghost-express-server](https://github.com/ghostcreative/ghost-express-server).
 
 ## Install
 
 ```bash
-$ npm install hapi-router
+$ npm install ghost-express-router
 ```
 
 ## Usage
 
 ```js
-server.register({
-  register: require('hapi-router'),
-  options: {
-    routes: 'src/**/*Route.js' // uses glob to include files
-  }
-}, function (err) {
-  if (err) throw err;
-});
-```
+const GhostExpressServer = require('ghost-express-server');
+const GhostExpressRouter = require('ghost-express-router');
+const GhostRouteController = require('ghost-route-controller');
+const Router = new GhostExpressRouter();
 
-## Options
-
-##### routes
-
-*Required* <br/>
-Type: `string` / `array`
-
-The [glob](https://github.com/bsiddiqui/hapi-router#glob-primer) pattern you would like to include
-
-##### ignore
-
-Type: `string` / `array`
-
-The pattern or an array of patterns to exclude
-
-##### cwd
-
-Type: `string`
-
-The current working directory in which to search (defaults to `process.cwd()`)
-
-
-## Specifying Routes
-
-Any files that match your routes glob will be loaded
-
-Example route file:
-```js
-module.exports = [
+Router.configure([
   {
-    path: '/test1',
     method: 'GET',
-    handler: function (request, reply) {
-      reply('hello');
+    path: '/:id',
+    auth: {
+      plugin: 'bearerJwt',
+      permissions: ['addressSelfFullAccess', 'addressAllFullAccess']
+    },
+    handler: GhostRouteController.get,
+    validate: {
+      params: { id: Joi.number().integer() }
     }
-  },
-  {
-    path: '/test2',
-    method: 'GET',
-    handler: function (request, reply) {
-      reply('hello');
+  }, {
+    method: 'POST',
+    path: '/',
+    auth: {
+      plugin: 'bearerJwt',
+      permissions: ['addressSelfFullAccess', 'addressAllFullAccess']
+    },
+    handler: GhostRouteController.create,
+    validate: {
+      body: {
+        name: Joi.string().required(),
+        line1: Joi.string().required(),
+        line2: Joi.string(),
+        city: Joi.string().required(),
+        state: Joi.string().required(),
+        zip: Joi.string().regex(/^\d{5}(?:[-\s]\d{4})?$/).required(),
+        phone: Joi.string(),
+        allerganId: Joi.string()
+      }
+    }
+  }, {
+    method: 'PUT',
+    path: '/:id',
+    auth: {
+      plugin: 'bearerJwt',
+      permissions: ['addressSelfFullAccess', 'addressAllFullAccess']
+    },
+    handler: GhostRouteController.update,
+    validate: {
+      params: { id: Joi.number().integer().required() },
+      body: {
+        doc: {
+          name: Joi.string().required(),
+          line1: Joi.string().required(),
+          line2: Joi.string(),
+          city: Joi.string().required(),
+          state: Joi.string().required(),
+          zip: Joi.string().regex(/^\d{5}(?:[-\s]\d{4})?$/).required(),
+          phone: Joi.string(),
+          allerganId: Joi.string(),
+          profileId: Joi.number().integer().required()
+        }
+      }
+    }
+  }, {
+    method: 'DELETE',
+    path: '/:id',
+    auth: {
+      plugin: 'bearerJwt',
+      permissions: ['addressSelfFullAccess', 'addressAllFullAccess']
+    },
+    handler: GhostRouteController.delete,
+    validate: {
+      params: { id: Joi.number().integer().required() }
     }
   }
-]
+]);
+
+GhostExpressServer.create(Config.get('server'))
+.then(server => {
+    server.useRouter(`/api/v1/addresses`, Router);
+    return server
+})
+.then(server => server.start())
+
 ```
-
-## Glob Primer
-
-Example globs:
-```js
-'routes/*.js'    // match all js files in the routes directory
-'routes/**/*.js' // recursively match all js files in the routes directory
-'**/*Route.js'   // match all js files that end with 'Route'
-```
-
-From [isaacs](https://github.com/isaacs/node-glob):
-
-"Globs" are the patterns you type when you do stuff like `ls *.js` on
-the command line, or put `build/*` in a `.gitignore` file.
-
-The following characters have special magic meaning when used in a
-path portion:
-
-* `*` Matches 0 or more characters in a single path portion
-* `?` Matches 1 character
-* `[...]` Matches a range of characters, similar to a RegExp range.
-If the first character of the range is `!` or `^` then it matches
-any character not in the range.
-* `!(pattern|pattern|pattern)` Matches anything that does not match
-any of the patterns provided.
-* `?(pattern|pattern|pattern)` Matches zero or one occurrence of the
-patterns provided.
-* `+(pattern|pattern|pattern)` Matches one or more occurrences of the
-patterns provided.
-* `*(a|b|c)` Matches zero or more occurrences of the patterns provided
-* `@(pattern|pat*|pat?erN)` Matches exactly one of the patterns
-provided
-* `**` If a "globstar" is alone in a path portion, then it matches
-zero or more directories and subdirectories searching for matches.
-It does not crawl symlinked directories.
