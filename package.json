@@ -1,6 +1,6 @@
 {
   "name": "ghost-express-router",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "nodejs express router to handle authorization and permissioning for ghost express apps",
   "main": "index.js",
   "scripts": {
